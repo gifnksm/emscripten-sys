@@ -1,0 +1,16 @@
+[package]
+name = "emscripten-sys"
+authors = ["gifnksm <makoto.nksm+github@gmail.com>"]
+version = "0.1.0"
+description = "Emscripten API bindings for Rust"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/gifnksm/emscripten-sys"
+
+build = "build.rs"
+
+[build-dependencies]
+bindgen = "0.22.0"
+
+[replace]
+"clang-sys:0.14.0" = { git = "https://github.com/KyleMayes/clang-sys.git" }
