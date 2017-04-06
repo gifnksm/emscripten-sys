@@ -1,7 +1,7 @@
 [package]
 name = "emscripten-sys"
 authors = ["gifnksm <makoto.nksm+github@gmail.com>"]
-version = "0.1.0"
+version = "0.3.0"
 description = "Emscripten API bindings for Rust"
 license = "MIT/Apache-2.0"
 readme = "README.md"
