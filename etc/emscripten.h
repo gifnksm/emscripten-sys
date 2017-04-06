@@ -6,4 +6,3 @@
 #include <emscripten/trace.h>
 #include <emscripten/vector.h>
 #include <emscripten/vr.h>
-#include <emscripten/wire.h>
