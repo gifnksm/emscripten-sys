@@ -1,0 +1,37 @@
+language: rust
+sudo: required
+dist: trusty
+
+services:
+  - docker
+
+env:
+  global:
+    - DOCKER_IMAGE=rust-emsdk
+    - secure: m5fHi88hCouPwprEoQq4l0POcb+BXmjInA5aBWhDE0eTDRPZG7QX5bi501WI37Pj2oZsU7qylQVrXB2daXqZWBQGn5gr1l7rZP/P08fOv0D4ZheEXYxvZHjGLBTAIKE8s3X3cGdxVVBTLO2JAMW8M9RJ2+JSAetQ02Fx6/zHOLT3D7jGlWtks5GLxp/zyesAgMRucDr73mDnfvdpT6FyyEV08nHoThxf4RbODMlhscSGVH5hUhvrYarv/WKUujU71SjAnDZi3Vcz1Fujh5f50N2mtd0T840mi1fbL4wNIIb4/eoNEWGHO5RYSBMcWZ7F3cU2yAN7aUpjCdAPMvtCAFTsFoLbw0a5FGKWkXpGp3swdZfWDKv/BOpRGoFL4HI58ruEpTPe9hUaHU7fkIbJ4xi+qTEI6TD/v/gY6FmFN4ZZYxMSQQuFByFECE5CdjppjkGXR1TISchg3j+GNfo7kBjqY83uh6rzG4OQVuvwSGvZvgv0sg09Qg3ykxQnx30v3IRnSGvTa8qlYqmH4fT/x5GkhJO9U7kUAeaGTrAwv+MZlTVDez86mHM6Rlz35L8H3otjLuzO/NFmkdtAsjhz9isClOwKXLgghCtYmJn0cVDJNv3XWA8AH3KXAdIWfYuLaWMHS/YKv8jLbYQmiG8Y08QwhWuM+4B+VZ7OixzLSd4=
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+install:
+  - |
+    docker build --rm -t ${DOCKER_IMAGE} \
+      --build-arg RUST_VERSION=${TRAVIS_RUST_VERSION} \
+      --build-arg BUILD_UID=$(id -u) \
+      --build-arg BUILD_GID=$(id -g) \
+      ci
+
+script:
+  - docker run -v $(pwd):/build -w /build ${DOCKER_IMAGE} ci/script.sh
+
+after_success: |
+  [ "${TRAVIS_BRANCH}" = master ] &&
+  [ "${TRAVIS_PULL_REQUEST}" == false ] &&
+  [ "${TRAVIS_RUST_VERSION}" == stable ] &&
+  cargo install ghp &&
+  ghp target/asmjs-unknown-emscripten/doc &&
+  git config user.name "Travis Documentation" &&
+  git config user.email "name@example.com" &&
+  git push -qf https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages 2>&1 > /dev/null
