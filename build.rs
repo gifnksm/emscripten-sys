@@ -18,13 +18,15 @@ fn main() {
         .no_unstable_rust()
         .use_core()
         .clang_arg(format!("-I{}/system/include", emscripten_dir))
+        .clang_arg(format!("-I{}/system/include/libc", emscripten_dir))
+        .clang_arg(format!("-I{}/system/include/libcxx", emscripten_dir))
         .clang_arg("-x")
         .clang_arg("c++")
         .clang_arg("-std=c++11")
         .clang_arg("-D__EMSCRIPTEN__");
 
-
-    builder.generate()
+    builder
+        .generate()
         .expect("failed to generate rust bindings")
         .write_to_file(Path::new(&out_dir).join("emscripten.rs"))
         .expect("failed to write to file")
