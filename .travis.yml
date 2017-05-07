@@ -1,0 +1,26 @@
+language: rust
+sudo: required
+dist: trusty
+
+services:
+  - docker
+
+env:
+  global:
+    - DOCKER_IMAGE=rust-emsdk
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+install:
+  - |
+    docker build --rm -t ${DOCKER_IMAGE} \
+      --build-arg RUST_VERSION=${TRAVIS_RUST_VERSION} \
+      --build-arg BUILD_UID=$(id -u) \
+      --build-arg BUILD_GID=$(id -g) \
+      ci
+
+script:
+  - docker run -v $(pwd):/build -w /build ${DOCKER_IMAGE} ci/script.sh
