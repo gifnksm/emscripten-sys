@@ -19,8 +19,6 @@ install:
   - |
     docker build --rm -t ${DOCKER_IMAGE} \
       --build-arg RUST_VERSION=${TRAVIS_RUST_VERSION} \
-      --build-arg BUILD_UID=$(id -u) \
-      --build-arg BUILD_GID=$(id -g) \
       ci
 
 script:
